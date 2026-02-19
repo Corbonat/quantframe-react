@@ -10,9 +10,10 @@ import { ItemName } from "@components/DataDisplay/ItemName";
 
 export type SummaryAccordionProps = {
   value: TauriTypes.SettingsStockItem;
+  lowRankModsRanklessMode: boolean;
 };
 
-export const SummaryAccordion = ({ value }: SummaryAccordionProps) => {
+export const SummaryAccordion = ({ value, lowRankModsRanklessMode }: SummaryAccordionProps) => {
   // Translate general
   const useTranslateForm = (key: string, context?: { [key: string]: any }, i18Key?: boolean) =>
     useTranslateForms(`settings.tabs.live_scraper.item.summary.${key}`, { ...context }, i18Key);
@@ -24,7 +25,7 @@ export const SummaryAccordion = ({ value }: SummaryAccordionProps) => {
 
   const getInterestingWtbItems = useQuery({
     queryKey: ["get_interesting_wtb_items"],
-    queryFn: () => api.live_scraper.get_interesting_wtb_items(value),
+    queryFn: () => api.live_scraper.get_interesting_wtb_items(value, lowRankModsRanklessMode),
     retry: false,
     enabled: false,
   });

@@ -14,7 +14,7 @@ use wf_market::{
 };
 
 use crate::{
-    DATABASE, enums::TradeMode, live_scraper::*, send_event, types::*, utils::SubTypeExt,
+    DATABASE, enums::TradeMode, live_scraper::*, send_event, types::*,
     utils::modules::states,
 };
 use crate::{
@@ -181,10 +181,11 @@ impl ItemModule {
             };
 
             // Get item price from cache
-            let item_price = cache
-                .item_price()
-                .find_by(&item_entry.wfm_url, item_entry.sub_type.clone())?
-                .unwrap_or_default();
+            let item_price = get_effective_item_price(
+                &item_info,
+                item_entry.sub_type.clone(),
+                &app.settings,
+            )?;
 
             // GUI event for progress
             self.send_event(
@@ -245,9 +246,11 @@ impl ItemModule {
             };
 
             // Apply filters to orders
-            orders.filter_by_sub_type(
-                wf_market::types::SubType::from_entity(item_entry.sub_type.clone()),
-                false,
+            filter_market_orders_by_mode(
+                &mut orders,
+                item_entry.sub_type.clone(),
+                &item_info,
+                &app.settings,
             );
             orders.filter_username(&app.user.wfm_username, true);
             orders.filter_user_status(StatusType::InGame, false);
@@ -348,7 +351,8 @@ impl ItemModule {
                 .set_width(180)
                 .set_enable(true),
         );
-        let settings = states::get_settings()?.live_scraper.stock_item;
+        let app_settings = states::get_settings()?;
+        let settings = app_settings.live_scraper.stock_item.clone();
         let wfm_client = states::app_state()?.wfm_client;
 
         // Check if item is blacklisted for buying
@@ -378,7 +382,13 @@ impl ItemModule {
                         &log_options,
                     );
                     // Delete existing WTB order if present (e.g. stock just reached max after a purchase)
-                    let mut order_info = get_order_info(item_info, entry, &wfm_client, OrderType::Buy);
+                    let mut order_info = get_order_info(
+                        item_info,
+                        entry,
+                        &wfm_client,
+                        OrderType::Buy,
+                        &app_settings,
+                    );
                     if order_info.has_operation("Update") {
                         order_info.add_operation("Delete");
                         if let Err(e) = progress_order(
@@ -417,7 +427,13 @@ impl ItemModule {
             None
         };
 
-        let mut order_info = get_order_info(item_info, entry, &wfm_client, OrderType::Buy);
+        let mut order_info = get_order_info(
+            item_info,
+            entry,
+            &wfm_client,
+            OrderType::Buy,
+            &app_settings,
+        );
 
         let highest_price = live_orders.highest_price(OrderType::Buy);
         let price_range = live_orders.price_range(OrderType::Buy);
@@ -635,7 +651,8 @@ impl ItemModule {
                 .set_enable(false),
         );
         // Get Settings.
-        let settings = states::get_settings()?.live_scraper.stock_item;
+        let app_settings = states::get_settings()?;
+        let settings = app_settings.live_scraper.stock_item.clone();
 
         // Check if item is blacklisted for selling
         if settings.is_item_blacklisted(&item_info.wfm_id, &TradeMode::Sell) {
@@ -663,7 +680,13 @@ impl ItemModule {
                 .with_context(entry.to_json())
         })?;
 
-        let mut order_info = get_order_info(item_info, entry, &wfm_client, OrderType::Sell);
+        let mut order_info = get_order_info(
+            item_info,
+            entry,
+            &wfm_client,
+            OrderType::Sell,
+            &app_settings,
+        );
         if stock_item.is_hidden && stock_item.status == StockStatus::InActive {
             info(
                 format!("{}Skip", COMPONENT),
@@ -847,7 +870,8 @@ impl ItemModule {
                 .set_width(180)
                 .set_enable(false),
         );
-        let settings = states::get_settings()?.live_scraper.stock_item;
+        let app_settings = states::get_settings()?;
+        let settings = app_settings.live_scraper.stock_item.clone();
         // Check if item is blacklisted for wishlist
         if settings.is_item_blacklisted(&item_info.wfm_id, &TradeMode::WishList) {
             info(
@@ -872,7 +896,13 @@ impl ItemModule {
                 .with_context(entry.to_json())
         })?;
 
-        let mut order_info = get_order_info(item_info, entry, &wfm_client, OrderType::Buy);
+        let mut order_info = get_order_info(
+            item_info,
+            entry,
+            &wfm_client,
+            OrderType::Buy,
+            &app_settings,
+        );
         if wishlist_item.is_hidden && wishlist_item.status == StockStatus::InActive {
             return Ok(());
         } else if wishlist_item.is_hidden && wishlist_item.status != StockStatus::InActive {

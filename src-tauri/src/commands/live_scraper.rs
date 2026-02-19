@@ -41,7 +41,11 @@ pub async fn live_scraper_get_state(
 #[tauri::command]
 pub async fn live_scraper_get_interesting_wtb_items(
     settings: StockItemSettings,
+    low_rank_mods_rankless_mode: bool,
 ) -> Result<Vec<ItemPriceInfo>, Error> {
-    let items = live_scraper::helpers::get_interesting_items(&settings);
+    let items = live_scraper::helpers::get_interesting_items(
+        &settings,
+        low_rank_mods_rankless_mode,
+    );
     Ok(items)
 }

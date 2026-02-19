@@ -30,7 +30,12 @@ export const ItemPanel = ({ form }: ItemPanelProps) => {
     },
     {
       label: useTranslateTabs("live_scraper.item.summary.title"),
-      component: <SummaryAccordion value={form.values.live_scraper.stock_item} />,
+      component: (
+        <SummaryAccordion
+          value={form.values.live_scraper.stock_item}
+          lowRankModsRanklessMode={form.values.live_scraper.low_rank_mods_rankless_mode}
+        />
+      ),
       id: "summary",
     },
   ];
