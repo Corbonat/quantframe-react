@@ -1867,7 +1867,7 @@
         }
       },
       "text": {
-        "version": "Version: <blue>{{version}}</blue>  Made with вќ¤пёЏ in рџ‡©рџ‡°. В© 2023-{{year}} Kenya-DK. All rights reserved ",
+        "version": "Version: <blue>{{version}}</blue>  Made with ❤️ in 🇩🇰. © 2023-{{year}} Kenya-DK. All rights reserved ",
         "patreon_thanks": " A special thanks to the Patreon 'Quantframe Users' supporters for making Quantframe possible: <blue>{{users}}</blue>.",
         "disclaimer": "Quantframe is a third-party app and is not affiliated with Digital Extremes."
       },
