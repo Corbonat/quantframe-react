@@ -140,7 +140,7 @@ export function CreateRiven({ value, onSubmit }: CreateRivenProps) {
       >
         <Grid mb={75}>
           <Grid.Col span={4} p={0}>
-            <RivenPreview riven={form.values as TauriTypes.StockRiven} />
+            <RivenPreview riven={form.values as TauriTypes.StockRiven} type="withoutBackground" />
           </Grid.Col>
           <Grid.Col span={8}>
             <Group gap="md" grow>
