@@ -217,6 +217,14 @@ export const GeneralPanel = ({ form, setHideTab }: GeneralPanelProps) => {
                 error={form.errors.should_delete_other_types}
               />
             </Tooltip>
+            <Tooltip label={useTranslateFormFields("low_rank_mods_rankless_mode.tooltip")}>
+              <Checkbox
+                label={useTranslateFormFields("low_rank_mods_rankless_mode.label")}
+                checked={form.values.live_scraper.low_rank_mods_rankless_mode}
+                onChange={(event) => form.setFieldValue(getFieldPath("low_rank_mods_rankless_mode"), event.currentTarget.checked)}
+                error={form.errors.low_rank_mods_rankless_mode}
+              />
+            </Tooltip>
           </Group>
           <Divider my={"md"} />
           <Group gap="md">

@@ -160,6 +160,7 @@ export namespace TauriTypes {
     report_to_wfm: boolean;
     auto_delete: boolean;
     auto_trade: boolean;
+    low_rank_mods_rankless_mode: boolean;
     should_delete_other_types: boolean;
     stock_item: SettingsStockItem;
     stock_riven: SettingsStockRiven;
@@ -170,6 +171,7 @@ export namespace TauriTypes {
     report_to_wfm: boolean;
     auto_delete: boolean;
     auto_trade: boolean;
+    low_rank_mods_rankless_mode: boolean;
     should_delete_other_types: boolean;
     stock_item: SettingsStockItem;
     stock_riven: SettingsStockRiven;

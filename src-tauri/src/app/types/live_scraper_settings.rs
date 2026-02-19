@@ -10,6 +10,7 @@ pub struct LiveScraperSettings {
     pub report_to_wfm: bool,
     pub auto_delete: bool,
     pub auto_trade: bool, // Will add order to you stock automatically or remove it if you have it
+    pub low_rank_mods_rankless_mode: bool, // Treat mods with max rank below 10 as rank 5 for market comparisons
     // Stock Mode
     pub stock_mode: StockMode,
     // Trade Mode's
@@ -33,6 +34,7 @@ impl Default for LiveScraperSettings {
             report_to_wfm: true,
             auto_trade: true,
             auto_delete: true,
+            low_rank_mods_rankless_mode: false,
         }
     }
 }

@@ -1,4 +1,4 @@
-{
+﻿{
   "months": [
     "January",
     "February",
@@ -1222,6 +1222,11 @@
                   "error": "Invalid should delete other trade types",
                   "tooltip": "Will delete other trade types if true example: if buy is enabled will delete sell/wishlist items if they are not blacklisted"
                 },
+                "low_rank_mods_rankless_mode": {
+                  "label": "Low-Rank Mods: Ignore Rank",
+                  "error": "Invalid low-rank mods rankless mode",
+                  "tooltip": "For mods with max rank below 10, treat market listings as max rank during price comparison"
+                },
                 "report_to_wfm": {
                   "label": "Report to Warframe Market",
                   "error": "Invalid report to Warframe Market",
@@ -1862,7 +1867,7 @@
         }
       },
       "text": {
-        "version": "Version: <blue>{{version}}</blue>  Made with ❤️ in 🇩🇰. © 2023-{{year}} Kenya-DK. All rights reserved ",
+        "version": "Version: <blue>{{version}}</blue>  Made with вќ¤пёЏ in рџ‡©рџ‡°. В© 2023-{{year}} Kenya-DK. All rights reserved ",
         "patreon_thanks": " A special thanks to the Patreon 'Quantframe Users' supporters for making Quantframe possible: <blue>{{users}}</blue>.",
         "disclaimer": "Quantframe is a third-party app and is not affiliated with Digital Extremes."
       },
@@ -2385,3 +2390,4 @@
     }
   }
 }
+
