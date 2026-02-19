@@ -3,6 +3,10 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize, Clone, Debug)]
 pub struct ItemPriceInfo {
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+
     #[serde(rename = "wfm_url")]
     pub wfm_url: String,
 
@@ -50,6 +54,7 @@ pub struct ItemPriceInfo {
 impl Default for ItemPriceInfo {
     fn default() -> Self {
         ItemPriceInfo {
+            name: None,
             wfm_url: "".to_string(),
             wfm_id: "".to_string(),
             uuid: "".to_string(),

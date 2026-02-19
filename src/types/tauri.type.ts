@@ -388,6 +388,7 @@ export namespace TauriTypes {
     state: boolean;
   }
   export interface ItemPriceInfo {
+    name?: string;
     wfm_url: string;
     wfm_id: string;
     uuid: string;

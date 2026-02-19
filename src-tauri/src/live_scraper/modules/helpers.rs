@@ -125,6 +125,7 @@ fn aggregate_rankless_item_price(entries: &[ItemPriceInfo]) -> Option<ItemPriceI
     let sub_type = min_rank_sub_type(entries);
 
     Some(ItemPriceInfo {
+        name: base.name.clone(),
         wfm_url: base.wfm_url.clone(),
         wfm_id: base.wfm_id.clone(),
         uuid: build_uuid(&base.wfm_url, &sub_type),
@@ -140,6 +141,28 @@ fn aggregate_rankless_item_price(entries: &[ItemPriceInfo]) -> Option<ItemPriceI
         week_price_shift,
         sub_type,
     })
+}
+
+fn attach_item_names(
+    cache: &crate::cache::CacheState,
+    mut items: Vec<ItemPriceInfo>,
+) -> Vec<ItemPriceInfo> {
+    for item in items.iter_mut() {
+        if item.name.is_some() && item.name.as_ref().is_some_and(|name| !name.is_empty()) {
+            continue;
+        }
+
+        let name = cache
+            .tradable_item()
+            .get_by(&item.wfm_id)
+            .or_else(|_| cache.tradable_item().get_by(&item.wfm_url))
+            .ok()
+            .map(|tradable| tradable.name);
+
+        item.name = name;
+    }
+
+    items
 }
 
 fn max_rank(item: &CacheTradableItem) -> Option<i64> {
@@ -308,6 +331,7 @@ pub fn get_interesting_items(
         .into_iter()
         .filter(|item| combined_filter(item))
         .collect::<Vec<_>>();
+    let items = attach_item_names(&cache, items);
     if items.is_empty() {
         info(
             "LiveScraper:Helpers:GetInterestingItems",
@@ -754,6 +778,7 @@ mod tests {
 
     fn sample_price(rank: i64, volume: f64, avg_price: f64) -> ItemPriceInfo {
         ItemPriceInfo {
+            name: None,
             wfm_url: "test_mod".to_string(),
             wfm_id: "123".to_string(),
             uuid: format!("test_mod-R {}", rank),
